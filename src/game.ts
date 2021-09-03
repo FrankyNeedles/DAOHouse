@@ -47,6 +47,33 @@ DAOStageShape.visible = true
 
 DAOStage.addComponentOrReplace(DAOStageShape)
 
+let animator = new Animator()
+DAOStage.addComponent(animator)
+
+const stageCLIP = new AnimationState("StageAction")
+animator.addClip(stageCLIP)
+stageCLIP.play()
+stageCLIP.playing = true
+stageCLIP.looping = true
+
+const row1CLIP = new AnimationState("1stRowAction")
+animator.addClip(row1CLIP)
+row1CLIP.play()
+row1CLIP.playing = true
+row1CLIP.looping = true
+
+const row2CLIP = new AnimationState("2ndRowAction")
+animator.addClip(row2CLIP)
+row2CLIP.play()
+row2CLIP.playing = true
+row2CLIP.looping = true
+
+const row3CLIP = new AnimationState("3rdRowAction")
+animator.addClip(row3CLIP)
+row3CLIP.play()
+row3CLIP.playing = true
+row3CLIP.looping = true
+
 // hud.attachToEntity(DAOScene)
 
 const teleporterLocations = [
