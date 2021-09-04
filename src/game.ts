@@ -1,8 +1,6 @@
-//  import {BuilderHUD} from './modules/BuilderHUD'
 //  import {spawnGltfX, spawnEntity, spawnBoxX, spawnPlaneX} from './modules/SpawnerFunctions'
 import * as teleporters from './modules/Teleporters'
 
-//  const hud = new BuilderHUD()
 const DAOScene = new Entity('DAOScene')
 
 engine.addEntity(DAOScene)
@@ -47,8 +45,6 @@ DAOStageShape.visible = true
 
 DAOStage.addComponentOrReplace(DAOStageShape)
 
-// hud.attachToEntity(DAOScene)
-
 const teleporterLocations = [
   new Vector3(18.5, 2, 8),
   new Vector3(45.5,2,40),
@@ -57,3 +53,53 @@ const teleporterLocations = [
 ]
 
 let teleporterEntities = teleporters.setupTeleporters(teleporterLocations)
+
+
+// const ball = new Entity()
+// ball.addComponent(new SphereShape())
+// ball.getComponent(SphereShape).withCollisions = false
+// ball.addComponent(new Transform({position: teleporterLocations[0], scale: new Vector3(.5,.5,.5)}))
+// engine.addEntity(ball)
+
+// @Component("lerpData")
+
+// export class LerpData {
+//   origin: Vector3 = Vector3.Zero()
+//   target: Vector3 = Vector3.Zero()
+//   fraction: number = 0
+// }
+
+// export class LerpMove implements ISystem {
+//   update(dt: number) {
+//     let transform = ball.getComponent(Transform)
+//     let lerp = ball.getComponent(LerpData)
+//     if (lerp.fraction < 1) {
+//       transform.position = Vector3.Lerp(lerp.origin, lerp.target, lerp.fraction)
+//       lerp.fraction += dt / 3
+//     }
+//   }
+// }
+
+
+// ball.addComponent(new LerpData())
+
+// export class AnimateTele implements ISystem {
+//   update() {
+//     teleporterLocations.map(loc => {
+//       const lerper = new LerpMove()
+//       let inZone = false
+//       if (Vector3.Distance(loc,Camera.instance.position) < 10) {
+//         engine.addSystem(lerper)
+//         ball.getComponent(LerpData).origin = loc
+//         ball.getComponent(LerpData).target = loc.add(Vector3.Up())
+//         inZone = true
+//       } else if (Vector3.Distance(loc,Camera.instance.position) >= 10 && inZone){
+//         ball.getComponent(LerpData).origin = loc.add(Vector3.Up())
+//         ball.getComponent(LerpData).target = loc
+//         inZone = false
+//       } 
+//     })
+//   }
+// }
+
+// engine.addSystem(new AnimateTele())

@@ -12,10 +12,10 @@ export const setupTeleporters = (locationArray:Array<Vector3>):Array<Entity> => 
        box.getComponent(BoxShape).visible = false
    
        //set transform component with initial position
-       box.addComponent(new Transform({ position: location, scale: new Vector3(3,4,3), rotation: new Quaternion(0,0,.6,0) }))
+       box.addComponent(new Transform({ position: location, scale: new Vector3(2,4,2), rotation: new Quaternion(0,0,.6,0) }))
    
        // create trigger area object, setting size and relative position
-       let triggerBox = new utils.TriggerBoxShape(new Vector3(3,4,3))
+       let triggerBox = new utils.TriggerBoxShape(new Vector3(2,4,2))
    
        //create trigger for entity
        box.addComponent(
@@ -30,6 +30,19 @@ export const setupTeleporters = (locationArray:Array<Vector3>):Array<Entity> => 
            
          )
        )
+
+       
+        const beam = new Entity('beam')
+        const beamShape = new GLTFShape("models/beam.gltf")
+        beam.addComponent(beamShape)
+        beam.addComponent(
+          new Transform({
+            position: location.add(Vector3.Down().scale(2)),
+            rotation: Quaternion.Euler(0,90,0),
+            scale: new Vector3(.8,.8,.8)
+          })
+        )
+        engine.addEntity(beam)
    
        //add entity to engine
        engine.addEntity(box)
