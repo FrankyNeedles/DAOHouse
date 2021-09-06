@@ -23,7 +23,7 @@ export const setupTeleporters = (locationArray:Array<Vector3>):Array<Entity> => 
            triggerBox, //shape
          {
            onCameraEnter :() => {
-             movePlayerTo(new Vector3(40, 32, 25))
+             movePlayerTo(new Vector3(40, 40, 25))
            }
          
          }
