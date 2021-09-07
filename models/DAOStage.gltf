@@ -1645,9 +1645,9 @@
             "uri" : "MARBLE_tan_diffuse.jpg"
         },
         {
-            "mimeType" : "image/png",
-            "name" : "MARBLE_pink_diffuse",
-            "uri" : "MARBLE_pink_diffuse.png"
+            "mimeType" : "image/jpeg",
+            "name" : "MARBLE_pink",
+            "uri" : "MARBLE_pink.jpg"
         },
         {
             "mimeType" : "image/png",
