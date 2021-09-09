@@ -1605,7 +1605,7 @@
                     1,
                     1,
                     1,
-                    0.8700000047683716
+                    0.75
                 ],
                 "baseColorTexture" : {
                     "index" : 35
@@ -2350,8 +2350,8 @@
         },
         {
             "mimeType" : "image/png",
-            "name" : "DCLMarbleROUGH",
-            "uri" : "DCLMarbleROUGH.png"
+            "name" : "DCLMarble_ROUGH",
+            "uri" : "DCLMarble_ROUGH.png"
         },
         {
             "mimeType" : "image/jpeg",
