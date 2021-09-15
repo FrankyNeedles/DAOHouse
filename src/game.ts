@@ -1,5 +1,6 @@
 //  import {spawnGltfX, spawnEntity, spawnBoxX, spawnPlaneX} from './modules/SpawnerFunctions'
 import * as teleporters from './modules/Teleporters'
+import * as api from './modules/api'
 
 const DAOScene = new Entity('DAOScene')
 
@@ -83,7 +84,12 @@ const teleporterLocations = [
 
 let teleporterEntities = teleporters.setupTeleporters(teleporterLocations)
 
+const setupPropTest = async () => {
+  const propTest = await api.proposalItem(new Vector3(5,5,5),{title:'hey',type:'poll',votes: [1,5,3]})
+  engine.addEntity(propTest)
+}
 
+setupPropTest()
 // const ball = new Entity()
 // ball.addComponent(new SphereShape())
 // ball.getComponent(SphereShape).withCollisions = false
