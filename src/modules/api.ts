@@ -14,21 +14,63 @@ interface ProposalSummary {
     votes:Array<Number>
 }
 
-export const proposalItem = async (location:Vector3, proposalSummary:ProposalSummary) => {
+export const swapScreen = (current:Entity, next:Entity) => {
+    engine.removeEntity(current)
+    engine.addEntity(next)
+}
+
+export const proposalItem = async (proposalNumber:number) => {
     let proposal = await getData()
 
-    const { title, status, type } = proposal[0]
-    const choices = proposal[0].snapshot_proposal.choices
-    log(title,status, type)
-    log(choices)
+    const { title, status, type } = proposal[proposalNumber]
+    const choices = proposal[proposalNumber].snapshot_proposal.choices
 
-    const box = new Entity()
-    box.addComponent(new BoxShape())
-    box.getComponent(BoxShape).withCollisions = false
-    box.addComponent(new Transform({ position: location }))
-    const titleText = new TextShape(title)
-    titleText.textWrapping = true
-    titleText.lineCount = Math.floor(title.length % 30)
-    box.addComponent(titleText)
-    return box
+    const propScreen = new Entity()
+    propScreen.addComponent(new CylinderShape())
+    propScreen.getComponent(CylinderShape).visible = false
+
+    const ringTop = new Entity()
+    const ringBot = new Entity()
+
+    ringTop.addComponent(new CylinderShape())
+    ringTop.setParent(propScreen)
+    
+    ringBot.addComponent(new CylinderShape())
+    ringBot.setParent(propScreen)
+
+    ringTop.addComponent(new Transform({scale: new Vector3(3,0.1,3), position: new Vector3(0, 1, 0)}))
+    ringBot.addComponent(new Transform({scale: new Vector3(3,0.1,3), position: new Vector3(0, -3.5, 0)}))
+
+    const textContainer = new Entity()
+    textContainer.setParent(propScreen)
+
+    const titleText = genText(title,3)
+    titleText.setParent(textContainer)
+
+    const proposalType = genText(type, 2, .5)
+    proposalType.setParent(textContainer)
+
+    const proposalStatus = genText(status, 2, 1)
+    proposalStatus.setParent(textContainer)
+    
+    textContainer.addComponent(new Transform({position: new Vector3(0,-.5,3), rotation: Quaternion.Euler(0,180,0)}))
+
+    propScreen.addComponent(new Transform({position: new Vector3(28.2,37,27.65)}))
+    propScreen.addComponent(new Billboard(false, true, false))
+
+    return propScreen
+}
+
+function genText(str:string, size:number, vDist?:number):Entity {
+    const textContainer = new Entity()
+    const text = new TextShape(str)
+    text.fontSize = size
+    text.width = 4
+    text.textWrapping = true
+    textContainer.addComponent(text)
+    if (vDist) {
+        textContainer.addComponent(new Transform({position: new Vector3(0, -vDist, 0)}))
+    }
+    
+    return textContainer
 }

@@ -1,6 +1,7 @@
 //  import {spawnGltfX, spawnEntity, spawnBoxX, spawnPlaneX} from './modules/SpawnerFunctions'
 import * as teleporters from './modules/Teleporters'
 import * as api from './modules/api'
+import { setTimeout } from '@dcl/ecs-scene-utils'
 
 const DAOScene = new Entity('DAOScene')
 
@@ -84,17 +85,45 @@ const teleporterLocations = [
 
 let teleporterEntities = teleporters.setupTeleporters(teleporterLocations)
 
+var screenEntity:Entity
+
 const setupPropTest = async () => {
-  const propTest = await api.proposalItem(new Vector3(5,5,5),{title:'hey',type:'poll',votes: [1,5,3]})
+  const propTest = await api.proposalItem(1)
+  screenEntity = propTest
   engine.addEntity(propTest)
 }
 
 setupPropTest()
-// const ball = new Entity()
-// ball.addComponent(new SphereShape())
-// ball.getComponent(SphereShape).withCollisions = false
-// ball.addComponent(new Transform({position: teleporterLocations[0], scale: new Vector3(.5,.5,.5)}))
-// engine.addEntity(ball)
+
+// 
+
+let timer: number = 10
+
+export class LoopSystem {
+  update(dt: number) {
+    if (timer > 0) {
+      timer -= dt
+    } else {
+      timer = 10
+      log(Camera.instance.feetPosition)
+    }
+  }
+}
+
+engine.addSystem(new LoopSystem())
+
+const ball = new Entity()
+ball.addComponent(new SphereShape())
+ball.getComponent(SphereShape).withCollisions = false
+ball.addComponent(new Transform({position: new Vector3(37, 40, 26), scale: new Vector3(.5,.5,.5)}))
+ball.addComponent(
+  new OnPointerDown(async () => {
+    const propTest = await api.proposalItem(Math.round(Math.random()*10))
+    api.swapScreen(screenEntity,propTest)
+    screenEntity = propTest
+  })
+)
+engine.addEntity(ball)
 
 // @Component("lerpData")
 
