@@ -95,7 +95,7 @@ const setupPropTest = async () => {
 
 setupPropTest()
 
-// 
+// get position all the time for dev convenience
 
 let timer: number = 10
 
@@ -112,18 +112,36 @@ export class LoopSystem {
 
 engine.addSystem(new LoopSystem())
 
+// test for swapping screen proposal to random proposal
 const ball = new Entity()
 ball.addComponent(new SphereShape())
 ball.getComponent(SphereShape).withCollisions = false
 ball.addComponent(new Transform({position: new Vector3(37, 40, 26), scale: new Vector3(.5,.5,.5)}))
+// ball.addComponent(
+//   new OnPointerDown(async () => {
+//     const propTest = await api.proposalItem(Math.round(Math.random()*10))
+//     api.swapScreen(screenEntity,propTest)
+//     screenEntity = propTest
+//   })
+// )
+engine.addEntity(ball)
+
+//message test
+const sceneMessageBus = new MessageBus()
+
 ball.addComponent(
-  new OnPointerDown(async () => {
-    const propTest = await api.proposalItem(Math.round(Math.random()*10))
-    api.swapScreen(screenEntity,propTest)
-    screenEntity = propTest
+  new OnClick(async (e) => {
+    const propTestData = await api.proposalItemData(Math.round(Math.random()*10))
+    sceneMessageBus.emit("ballClicked", { proposal: propTestData})
   })
 )
-engine.addEntity(ball)
+
+sceneMessageBus.on("ballClicked", (data) => {
+  log(data)
+  let nextScreenEntity = api.proposalItem(data.proposal)
+  api.swapScreen(screenEntity, nextScreenEntity)
+  screenEntity = nextScreenEntity
+})
 
 // @Component("lerpData")
 

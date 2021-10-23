@@ -19,11 +19,16 @@ export const swapScreen = (current:Entity, next:Entity) => {
     engine.addEntity(next)
 }
 
-export const proposalItem = async (proposalNumber:number) => {
+export const proposalItemData = async (proposalNumber:number) => {
     let proposal = await getData()
-
     const { title, status, type } = proposal[proposalNumber]
     const choices = proposal[proposalNumber].snapshot_proposal.choices
+    return { title, status, type, choices }
+}
+
+export const proposalItem = (proposalData:any) => {
+
+    const { title, status, type, choices } = proposalData
 
     const propScreen = new Entity()
     propScreen.addComponent(new CylinderShape())
