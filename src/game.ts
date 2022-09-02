@@ -1,4 +1,5 @@
 //  import {spawnGltfX, spawnEntity, spawnBoxX, spawnPlaneX} from './modules/SpawnerFunctions'
+import { hud } from '@dcl/builder-hud'
 import * as teleporters from './modules/Teleporters'
 import * as api from './modules/api'
 import { setTimeout } from '@dcl/ecs-scene-utils'
@@ -74,26 +75,15 @@ row3CLIP.play()
 row3CLIP.playing = true
 row3CLIP.looping = true
 
-// hud.attachToEntity(DAOScene)
 
 const teleporterLocations = [
-  new Vector3(18.5, 2, 8),
-  new Vector3(45.5,2,40),
-  new Vector3(18.5,2,40),
-  new Vector3(45.5,2,8)
+  [new Vector3(18.5, 2, 8), new Vector3(15.5, 27.7, 6), new Vector3(0,-50,0)],
+  [new Vector3(45.5,2,40), new Vector3(47.5, 27.7, 42), new Vector3(0,130,0)],
+  [new Vector3(18.5,2,40), new Vector3(14.5,27.7,42), new Vector3(0,45,0)],
+  [new Vector3(45.5,2,8),  new Vector3(48.5,27.7,7), new Vector3(0,-135,0)]
 ]
 
 let teleporterEntities = teleporters.setupTeleporters(teleporterLocations)
-
-var screenEntity:Entity
-
-const setupPropTest = async () => {
-  const propTest = await api.proposalItem(1)
-  screenEntity = propTest
-  engine.addEntity(propTest)
-}
-
-setupPropTest()
 
 // get position all the time for dev convenience
 
@@ -111,37 +101,6 @@ export class LoopSystem {
 }
 
 engine.addSystem(new LoopSystem())
-
-// test for swapping screen proposal to random proposal
-const ball = new Entity()
-ball.addComponent(new SphereShape())
-ball.getComponent(SphereShape).withCollisions = false
-ball.addComponent(new Transform({position: new Vector3(37, 40, 26), scale: new Vector3(.5,.5,.5)}))
-// ball.addComponent(
-//   new OnPointerDown(async () => {
-//     const propTest = await api.proposalItem(Math.round(Math.random()*10))
-//     api.swapScreen(screenEntity,propTest)
-//     screenEntity = propTest
-//   })
-// )
-engine.addEntity(ball)
-
-//message test
-const sceneMessageBus = new MessageBus()
-
-ball.addComponent(
-  new OnClick(async (e) => {
-    const propTestData = await api.proposalItemData(Math.round(Math.random()*10))
-    sceneMessageBus.emit("ballClicked", { proposal: propTestData})
-  })
-)
-
-sceneMessageBus.on("ballClicked", (data) => {
-  log(data)
-  let nextScreenEntity = api.proposalItem(data.proposal)
-  api.swapScreen(screenEntity, nextScreenEntity)
-  screenEntity = nextScreenEntity
-})
 
 // @Component("lerpData")
 

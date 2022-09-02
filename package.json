@@ -14,9 +14,11 @@
     "decentraland-ecs": "^6.6.6"
   },
   "dependencies": {
+    "@dcl/builder-hud": "^1.0.1",
     "@dcl/ecs-scene-utils": "^1.7.3"
   },
-  "bundleDependencies": [
-    "@dcl/ecs-scene-utils"
+  "bundledDependencies": [
+    "@dcl/ecs-scene-utils",
+    "@dcl/builder-hud"
   ]
 }
