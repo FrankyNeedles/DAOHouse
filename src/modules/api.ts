@@ -2,7 +2,7 @@ import * as utils from '@dcl/ecs-scene-utils'
 
 export const getData = async () => {
     let json = await utils.sendRequest(
-        'https://governance.decentraland.org/api/proposals?limit=25'
+        'https://governance.decentraland.org/api/proposals?limit=14'
       )
     const { data } = json
     return data
@@ -14,16 +14,31 @@ interface ProposalSummary {
     votes:Array<Number>
 }
 
+interface ProposalItem {
+    title:string,
+    status:string,
+    type:string,
+}
+
 export const swapScreen = (current:Entity, next:Entity) => {
     engine.removeEntity(current)
     engine.addEntity(next)
 }
 
 export const proposalItemData = async (proposalNumber:number) => {
-    let proposal = await getData()
-    const { title, status, type } = proposal[proposalNumber]
-    const choices = proposal[proposalNumber].snapshot_proposal.choices
+    let proposals = await getData()
+    const { title, status, type } = proposals[proposalNumber]
+    const choices = proposals[proposalNumber].snapshot_proposal.choices
     return { title, status, type, choices }
+}
+
+export const proposalItemDataSet = async ():Promise<Array<ProposalItem>> => {
+    let proposals = await getData()
+    const propData = proposals.map((proposal:any) => {
+        const { title, status, type } = proposal
+        return { title, status, type }
+    })
+    return propData
 }
 
 export const proposalItem = (proposalData:any) => {
@@ -45,7 +60,6 @@ export const proposalItem = (proposalData:any) => {
 
     ringTop.addComponent(new Transform({scale: new Vector3(3,0.1,3), position: new Vector3(0, 1, 0)}))
     ringBot.addComponent(new Transform({scale: new Vector3(3,0.1,3), position: new Vector3(0, -3.5, 0)}))
-
     const textContainer = new Entity()
     textContainer.setParent(propScreen)
 
@@ -74,7 +88,7 @@ function genText(str:string, size:number, vDist?:number):Entity {
     text.textWrapping = true
     textContainer.addComponent(text)
     if (vDist) {
-        textContainer.addComponent(new Transform({position: new Vector3(0, -vDist, 0)}))
+        textContainer.addComponent(new Transform({position: new Vector3(0, -vDist*2, 0)}))
     }
     
     return textContainer

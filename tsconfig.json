@@ -12,6 +12,9 @@
       "@dcl/builder-hud": [
         "node_modules/@dcl/builder-hud/dist/index.d.ts",
         "node_modules\\@dcl\\builder-hud\\dist\\index.d.ts"
+      ],
+      "@dcl/ui-scene-utils": [
+        "node_modules/@dcl/ui-scene-utils/dist/index.d.ts"
       ]
     }
   },

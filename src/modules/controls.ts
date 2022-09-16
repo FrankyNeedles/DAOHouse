@@ -1,4 +1,5 @@
-import * as api from 'api';
+import { hud } from '@dcl/builder-hud'
+import * as api from 'api'
 var screenEntity:Entity
 
 const setupPropTest = async () => {
@@ -13,15 +14,9 @@ setupPropTest()
 const ball = new Entity()
 ball.addComponent(new SphereShape())
 ball.getComponent(SphereShape).withCollisions = false
-ball.addComponent(new Transform({position: new Vector3(37, 40, 26), scale: new Vector3(.5,.5,.5)}))
-// ball.addComponent(
-//   new OnPointerDown(async () => {
-//     const propTest = await api.proposalItem(Math.round(Math.random()*10))
-//     api.swapScreen(screenEntity,propTest)
-//     screenEntity = propTest
-//   })
-// )
+ball.addComponent(new Transform({position: new Vector3(27,36,20), scale: new Vector3(.5,.5,.5)}))
 engine.addEntity(ball)
+hud.attachToEntity(ball)
 
 //message test
 const sceneMessageBus = new MessageBus()

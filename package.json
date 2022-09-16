@@ -15,10 +15,12 @@
   },
   "dependencies": {
     "@dcl/builder-hud": "^1.0.1",
-    "@dcl/ecs-scene-utils": "^1.7.3"
+    "@dcl/ecs-scene-utils": "^1.7.3",
+    "@dcl/ui-scene-utils": "^1.8.4"
   },
-  "bundledDependencies": [
+  "bundleDependencies": [
+    "@dcl/builder-hud",
     "@dcl/ecs-scene-utils",
-    "@dcl/builder-hud"
+    "@dcl/ui-scene-utils"
   ]
 }

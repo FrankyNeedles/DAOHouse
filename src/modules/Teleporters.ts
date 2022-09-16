@@ -26,9 +26,7 @@ export const setupTeleporters = (locationArray: Array<Array<Vector3>>): Array<En
           onCameraEnter: () => {
             movePlayerTo(new Vector3(location[1].x, location[1].y + 10, location[1].z))
           }
-
         }
-
       )
     )
 
@@ -51,29 +49,6 @@ export const setupTeleporters = (locationArray: Array<Array<Vector3>>): Array<En
     const tpPad = new Entity('tp-pad')
 
     engine.addEntity(tpPad)
-
-    // get rotation
-    // const opp = location[0].x - 24
-    // const adj = location[0].z - 32
-    // let yRotation
-
-    // get top location
-    // let toLocation = new Vector3(location.x, 28, location.z)
-
-    // yRotation = Math.atan(adj/opp) * 180 / Math.PI
-    // if (opp < 0 && adj > 0) {
-    //   yRotation += 90
-    // } else if (opp < 0 && adj < 0) {
-    //   // toLocation.x -= 2
-    //   // toLocation.z -= 3
-    //   yRotation += 233
-    // } else if (opp > 0 && adj < 0) {
-    //   yRotation -= 90
-    // } else {
-    //   yRotation += 110
-    // }
-
-    // log(yRotation + " final angle")
     
     const transform5 = new Transform({
       position: location[1],
@@ -81,7 +56,6 @@ export const setupTeleporters = (locationArray: Array<Array<Vector3>>): Array<En
       scale: new Vector3(1, 1, 1)
     })
     
-    // transform5.lookAt(new Vector3(24, 28, 32))
     transform5.rotate(new Vector3(0,1,0), location[2].y)
 
     tpPad.addComponentOrReplace(transform5)
