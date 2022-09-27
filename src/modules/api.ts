@@ -8,13 +8,14 @@ export const getData = async () => {
     return data
 }
 
-interface ProposalSummary {
+export interface ProposalSummary {
     title:String,
     type:String,
     votes:Array<Number>
 }
 
-interface ProposalItem {
+export interface ProposalItem {
+    id:string,
     title:string,
     status:string,
     type:string,
@@ -35,8 +36,8 @@ export const proposalItemData = async (proposalNumber:number) => {
 export const proposalItemDataSet = async ():Promise<Array<ProposalItem>> => {
     let proposals = await getData()
     const propData = proposals.map((proposal:any) => {
-        const { title, status, type } = proposal
-        return { title, status, type }
+        const { id, title, status, type } = proposal
+        return { id, title, status, type }
     })
     return propData
 }
