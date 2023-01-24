@@ -2,7 +2,7 @@ import * as utils from '@dcl/ecs-scene-utils'
 
 export const getData = async () => {
     let json = await utils.sendRequest(
-        'https://governance.decentraland.org/api/proposals?limit=14'
+        'https://purple-fog-56ac.twaldorf.workers.dev/proxy/?route=proposals?limit=14'
       )
     const { data } = json
     return data

@@ -5,7 +5,7 @@ import { setTimeout } from '@dcl/ecs-scene-utils'
 import * as setups from './modules/setups'
 import * as ui from './modules/ui'
 
-ui.setupUi()
+ui.renderProposalUI()
 
 engine.addEntity(setups.scene())
 engine.addEntity(setups.stage())
