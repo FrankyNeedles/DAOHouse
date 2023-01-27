@@ -12,11 +12,18 @@ interface PropUIItem extends api.ProposalItem {
     entity: UIText
 }
 
+// Dimension consts
+const globalX = -80
+const margin = 20
+
 export let lightTheme = new Texture('https://decentraland.org/images/ui/light-atlas-v3.png')
+
 
 // Set up the main UI canvas and list of current proposals, then the queue
 // This is `main`
 export const renderProposalUI = async () => {
+
+
     const canvas = new UICanvas()
 
     const background = new UIImage(canvas, lightTheme)
@@ -26,19 +33,20 @@ export const renderProposalUI = async () => {
     background.sourceTop = 11
     background.width = 600
     background.height = 500
+    background.positionX = globalX
 
     const titleText = new UIText(canvas)
     titleText.color = Color4.Black()
     titleText.value = 'Town Hall Discussion Queue!'
     titleText.fontSize = 24
-    titleText.positionX = -220
+    titleText.positionX = -220 + globalX
     titleText.positionY = 220
 
     const subtitleText = new UIText(canvas)
     subtitleText.color = Color4.Black()
     subtitleText.value = 'Active Proposals'
     subtitleText.fontSize = 16
-    subtitleText.positionX = -220
+    subtitleText.positionX = -220 + globalX
     subtitleText.positionY = 180
 
     const addButton = new UIImage(canvas, lightTheme)
@@ -46,7 +54,7 @@ export const renderProposalUI = async () => {
     addButton.sourceTop = 612
     addButton.sourceWidth = 180
     addButton.sourceHeight = 50
-    addButton.positionX = 220
+    addButton.positionX = 220 + globalX
     addButton.positionY = -200
     addButton.width = 100
     addButton.height = 35
@@ -81,7 +89,7 @@ export const renderProposalUI = async () => {
         rect.sourceTop = 398
         rect.width = 540
         rect.height = 16
-        rect.positionX = 0
+        rect.positionX = globalX
         rect.positionY = spacer
         
         const myText = new UIText(rect)
@@ -115,6 +123,7 @@ export const renderProposalUI = async () => {
 
     addButton.onClick = new OnPointerDown(() => {
         sceneMessageBus.emit("proposalsAdded", {proposals: outgoing_proposals})
+        log('sent', outgoing_proposals)
     })
 
     //display the queue on the right
@@ -153,6 +162,22 @@ const renderProposal = (xOffset: number, yOffset:number, canvas: UICanvas, propo
     return ui_proposal
 }
 
+const renderQueueItem = (xOffset: number, yOffset:number, canvas: UICanvas, proposal: api.ProposalItem):PropUIItem => {
+    log(proposal.title)
+    const titleText = new UIText(canvas)
+    const ui_proposal:PropUIItem = {...proposal, entity: titleText}
+    titleText.color = Color4.Black()
+    titleText.value = proposal.title
+    titleText.fontSize = 12
+    titleText.positionX = xOffset
+    titleText.positionY = yOffset
+    titleText.width = 210
+    titleText.textWrapping = true
+    titleText.vAlign = "top"
+    titleText.lineCount = 2
+    return ui_proposal
+}
+
 // TODO: Move me to a utility lib
 const clearRendered = (renderedMaterial:Array<PropUIItem>) => {
     renderedMaterial.map((propUIItem) => {
@@ -160,8 +185,18 @@ const clearRendered = (renderedMaterial:Array<PropUIItem>) => {
     })
 }
 
-const addToQueue = (proposal:api.ProposalItem, proposal_queue:Array<api.ProposalItem>):Array<api.ProposalItem> => {
-    const new_queue = [...proposal_queue, proposal]
+const addToQueue = (proposals:Array<api.ProposalItem>, proposal_queue:Array<api.ProposalItem>):Array<api.ProposalItem> => {
+    // whaaaaaaat why doesn't this work?
+    const dedupe_incoming = proposals.filter((item: api.ProposalItem) => {
+        if (proposal_queue.indexOf(item) == -1) {
+            log(proposal_queue.indexOf(item), proposal_queue.length)
+            return false
+        } else {
+            return true
+        }
+    })
+    log(dedupe_incoming, proposals, proposal_queue)
+    const new_queue = [...proposal_queue, ...dedupe_incoming]
     return new_queue
 }
 
@@ -186,19 +221,24 @@ export const renderProposalQueue = async (
     queueBg.sourceHeight = 356
     queueBg.sourceLeft = 500
     queueBg.sourceTop = 11
-    queueBg.width = 150
+    queueBg.width = 250
     queueBg.height = 500
-    queueBg.positionX = xOffset
+    queueBg.positionX = xOffset + globalX + margin * 2
 
     const titleText = new UIText(canvas)
     titleText.color = Color4.Black()
     titleText.value = 'Active Queue'
     titleText.fontSize = 24
-    titleText.positionX = xOffset + 20
+    titleText.positionX = xOffset + globalX - margin / 2
     titleText.positionY = 220
 
     sceneMessageBus.on("proposalsAdded", (data) => {
         proposal_queue = addToQueue(data.proposals, proposal_queue)
+        let yOffset = -100
+        proposal_queue.map((proposal:api.ProposalItem) => {
+            const uiItem = renderQueueItem(xOffset - margin * 2 + 5, yOffset, canvas, proposal)
+            yOffset -= 40
+        })
     })
 
     updateUIQueue(xOffset, proposal_queue, proposals, canvas)
