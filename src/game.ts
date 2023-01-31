@@ -1,15 +1,18 @@
 //  import {spawnGltfX, spawnEntity, spawnBoxX, spawnPlaneX} from './modules/SpawnerFunctions'
 
 import * as teleporters from './modules/Teleporters'
-import { setTimeout } from '@dcl/ecs-scene-utils'
+import { MoveTransformComponent, setTimeout } from '@dcl/ecs-scene-utils'
 import * as setups from './modules/setups'
 import * as ui from './modules/ui'
-
-ui.renderProposalUI()
+import * as books from './modules/library'
+import { movePlayerTo } from '@decentraland/RestrictedActions'
+import { lightTheme } from '@dcl/ui-scene-utils'
 
 engine.addEntity(setups.scene())
 engine.addEntity(setups.stage())
 engine.addEntity(setups.podiumCollider())
+
+books.spawnProposalsFromQueue()
 
 const teleporterLocations = [
   [new Vector3(18.5, 2, 8), new Vector3(15.5, 27.7, 6), new Vector3(0,-50,0)],
@@ -37,45 +40,11 @@ export class LoopSystem {
 
 engine.addSystem(new LoopSystem())
 
-// @Component("lerpData")
+books.spawnProposals(engine)
+teleporters.setupEffects(engine, teleporterLocations)
 
-// export class LerpData {
-//   origin: Vector3 = Vector3.Zero()
-//   target: Vector3 = Vector3.Zero()
-//   fraction: number = 0
-// }
+// teleport for debug reasons
+setTimeout(5000, () => {
+  movePlayerTo(new Vector3(30,32,32))
+})
 
-// export class LerpMove implements ISystem {
-//   update(dt: number) {
-//     let transform = ball.getComponent(Transform)
-//     let lerp = ball.getComponent(LerpData)
-//     if (lerp.fraction < 1) {
-//       transform.position = Vector3.Lerp(lerp.origin, lerp.target, lerp.fraction)
-//       lerp.fraction += dt / 3
-//     }
-//   }
-// }
-
-
-// ball.addComponent(new LerpData())
-
-// export class AnimateTele implements ISystem {
-//   update() {
-//     teleporterLocations.map(loc => {
-//       const lerper = new LerpMove()
-//       let inZone = false
-//       if (Vector3.Distance(loc,Camera.instance.position) < 10) {
-//         engine.addSystem(lerper)
-//         ball.getComponent(LerpData).origin = loc
-//         ball.getComponent(LerpData).target = loc.add(Vector3.Up())
-//         inZone = true
-//       } else if (Vector3.Distance(loc,Camera.instance.position) >= 10 && inZone){
-//         ball.getComponent(LerpData).origin = loc.add(Vector3.Up())
-//         ball.getComponent(LerpData).target = loc
-//         inZone = false
-//       } 
-//     })
-//   }
-// }
-
-// engine.addSystem(new AnimateTele())

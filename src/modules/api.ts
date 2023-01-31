@@ -19,27 +19,45 @@ export interface ProposalItem {
     title:string,
     status:string,
     type:string,
+    description:string
 }
 
-export const swapScreen = (current:Entity, next:Entity) => {
+export const swapEntity = (current:Entity, next:Entity) => {
     engine.removeEntity(current)
     engine.addEntity(next)
 }
 
-export const proposalItemData = async (proposalNumber:number) => {
+export const proposalItemData = async (proposalNumber:number):Promise<ProposalItem> => {
     let proposals = await getData()
-    const { title, status, type } = proposals[proposalNumber]
+    const { id, title, status, type, description } = proposals[proposalNumber]
     const choices = proposals[proposalNumber].snapshot_proposal.choices
-    return { title, status, type, choices }
+    return { id, title, status, type, description }
 }
 
 export const proposalItemDataSet = async ():Promise<Array<ProposalItem>> => {
     let proposals = await getData()
     const propData = proposals.map((proposal:any) => {
-        const { id, title, status, type } = proposal
-        return { id, title, status, type }
+        const { id, title, status, type, description } = proposal
+        return { id, title, status, type, description }
     })
     return propData
+}
+
+export const presentationBand = (proposalData:any) => {
+    const { title, status, type, description } = proposalData
+
+    const textContainer = new Entity()
+
+    const titleText = genText(title,20, 1, 40)
+    titleText.setParent(textContainer)
+
+    const proposalType = genText(type, 2, .5)
+    proposalType.setParent(textContainer)
+    
+    textContainer.addComponent(new Transform({position: new Vector3(40,48,40)}))
+    // textContainer.addComponent(new Billboard(false, true, false))
+
+    return textContainer
 }
 
 export const proposalItem = (proposalData:any) => {
@@ -81,11 +99,15 @@ export const proposalItem = (proposalData:any) => {
     return propScreen
 }
 
-function genText(str:string, size:number, vDist?:number):Entity {
+function genText(str:string, size:number, vDist?:number, width?:number):Entity {
     const textContainer = new Entity()
     const text = new TextShape(str)
     text.fontSize = size
-    text.width = 4
+    if (width) {
+        text.width = width
+    } else {
+        text.width = 4
+    }
     text.textWrapping = true
     textContainer.addComponent(text)
     if (vDist) {
