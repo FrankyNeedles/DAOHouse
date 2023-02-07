@@ -12,7 +12,6 @@ interface PropUIItem extends api.ProposalItem {
     entity: UIText
 }
 
-// Dimension consts
 const globalX = -80
 const margin = 20
 
@@ -437,4 +436,3 @@ setupPodiums([
     [new Vector3(32,1.2,16), Quaternion.Euler(36, 180, 0)], 
     [new Vector3(32,1.2,32), Quaternion.Euler(36, 0, 0)]])
 
-    
