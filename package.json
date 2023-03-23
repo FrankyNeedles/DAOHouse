@@ -1,7 +1,7 @@
 {
-  "name": "dcl-project",
-  "version": "1.0.0",
-  "description": "My new Decentraland project",
+  "name": "daohouse",
+  "version": "0.1.0",
+  "description": "Decentraland DAO Governance Hall",
   "scripts": {
     "start": "dcl start",
     "build": "build-ecs",

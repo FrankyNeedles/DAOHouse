@@ -8,6 +8,7 @@ import * as books from './modules/library'
 import { movePlayerTo } from '@decentraland/RestrictedActions'
 import { lightTheme } from '@dcl/ui-scene-utils'
 
+
 engine.addEntity(setups.scene())
 engine.addEntity(setups.stage())
 engine.addEntity(setups.podiumCollider())
@@ -44,7 +45,7 @@ books.spawnProposals(engine)
 teleporters.setupEffects(engine, teleporterLocations)
 
 // teleport for debug reasons
-setTimeout(5000, () => {
-  movePlayerTo(new Vector3(30,32,32))
-})
+// setTimeout(5000, () => {
+//   movePlayerTo(new Vector3(30,32,32))
+// })
 
