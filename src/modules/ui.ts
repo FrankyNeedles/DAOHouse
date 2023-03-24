@@ -1,6 +1,7 @@
 import { map } from '@dcl/ecs-scene-utils'
 import * as ui from '@dcl/ui-scene-utils'
 import * as api from './api'
+import { createScrollBox } from './ui-text-box'
 
 const sceneMessageBus = new MessageBus()
 
@@ -39,10 +40,11 @@ export const renderSingleProposalView = async () => {
     titleText.color = Color4.Black()
     titleText.value = 'Town Hall Discussion Queue!'
     titleText.fontSize = 24
-    titleText.positionX = -80
-    titleText.positionY = -120
+    titleText.positionX = globalX - 70
+    titleText.positionY = 200
     titleText.textWrapping = true
-    titleText.vAlign = "top"
+    titleText.fontAutoSize = true
+    // titleText.vAlign = "top"
     titleText.width = 400
 
     ui_texts.push(titleText)
@@ -51,8 +53,8 @@ export const renderSingleProposalView = async () => {
     subtitleText.color = Color4.Black()
     subtitleText.value = 'Active Proposals'
     subtitleText.fontSize = 16
-    subtitleText.positionX = -220 + globalX
-    subtitleText.positionY = 180
+    subtitleText.positionX = globalX - 220
+    subtitleText.positionY = 160
 
     ui_texts.push(subtitleText)
 
@@ -90,9 +92,20 @@ export const renderSingleProposalView = async () => {
     })
 
     let propData = await api.proposalItemData(Math.round(Math.random()*10))
+
     titleText.value = propData.title
-    subtitleText.value = propData.status
-    // paragraphText.value = propData.description
+    // titleText.fontAutoSize = true
+
+    const status_formatted = propData.status.charAt(0).toUpperCase() + propData.status.slice(1)
+    subtitleText.value = status_formatted
+
+    // render the paragraph
+    const paragraph = createScrollBox(
+        0, 120,
+        600,600,
+        propData.description,
+        canvas)
+    ui_texts = [...ui_texts, ...paragraph]
 
 }
 
