@@ -1,6 +1,7 @@
 
 import * as ui from 'ui'
 import { ProposalItem, proposalItem } from './api'
+import { renderSingleProposalView } from './ProposalItemUI'
 
 export function spawnProposals(engine:Engine) {
     spawnBookshelf(12, 17, 14.5)
@@ -46,7 +47,7 @@ const spawnProposal = (pos:Vector3) => {
     book.addComponent(new Transform({position: pos, scale: new Vector3(.1,.5,.3)}))
     book.getComponent(Transform).lookAt(new Vector3(32, 1, 24))
     book.addComponent(new OnPointerDown((e) => {
-        ui.renderSingleProposalView()
+        renderSingleProposalView(-80)
     }))
     engine.addEntity(book)
 }

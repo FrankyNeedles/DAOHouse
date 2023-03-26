@@ -13,6 +13,9 @@ engine.addEntity(setups.scene())
 engine.addEntity(setups.stage())
 engine.addEntity(setups.podiumCollider())
 
+ui.setupProposalList()
+ui.setupProposalQueue()
+
 books.spawnProposalsFromQueue()
 
 const teleporterLocations = [
