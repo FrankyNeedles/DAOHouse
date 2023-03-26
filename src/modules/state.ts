@@ -8,10 +8,9 @@ export interface SceneState {
 
 var my_scene_state:SceneState = {queue:[]}
 
-// export const queryState = (bus:MessageBus) => {
-//     bus.on("state update", data) {
-//         my_scene_state.update(data.scene_state)
-//     }
+// query queue (broadcast)
+//     all respond with queue
+//     all sum all queues
+// add proposal (broadcast)
+// remove proposal (broadcast)
 
-//     bus.emit("state query", my_scene_state)
-// }

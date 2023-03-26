@@ -7,7 +7,7 @@ var scrolling = false
 export function createScrollBox(
     x:number, y:number, 
     width:number, height:number, 
-    contents:string, canvas:UICanvas):Array<UIText> {
+    contents:string, canvas:UICanvas):Paragraph {
 
         // create a bounding container to hold all lines
         const container = new UIContainerRect(canvas)
@@ -21,21 +21,21 @@ export function createScrollBox(
         // draw a line showing the range of the scroll bar
         // const scroll_line = renderScrollLine(container)
 
-        // render a scroll bar the user can use to move through text
-        const up_btn = renderUpBtn(container, 180, -20)
-        const down_btn = renderDownBtn(container, 180, 20)
+        // // render a scroll bar the user can use to move through text
+        // const up_btn = renderUpBtn(container, 180, -20)
+        // const down_btn = renderDownBtn(container, 180, 20)
         
-        up_btn.onClick = new OnPointerDown(() => {
-            paragraph.scrollDown()
-            paragraph.scrollDown()
-        })
+        // up_btn.onClick = new OnPointerDown(() => {
+        //     paragraph.scrollDown()
+        //     paragraph.scrollDown()
+        // })
         
-        down_btn.onClick = new OnPointerDown(() => {
-            paragraph.scrollUp()
-            paragraph.scrollUp()
-        })
+        // down_btn.onClick = new OnPointerDown(() => {
+        //     paragraph.scrollUp()
+        //     paragraph.scrollUp()
+        // })
 
-        return paragraph.text_entities
+        return paragraph
 }
 
 interface Paragraph {
@@ -101,8 +101,8 @@ function renderParagraph(text_stack:Array<string>, y:number, height:number, widt
     return paragraph
 }
 
-function renderUpBtn(container:UIContainerRect, x:number, y:number):UIImage {
-    let bar = new UIImage(container, atlas)
+export function renderUpBtn(canvas:UICanvas, x:number, y:number):UIImage {
+    let bar = new UIImage(canvas, atlas)
     bar.vAlign = "top"
     bar.sourceLeft = 0
     bar.sourceTop = 128
@@ -115,8 +115,8 @@ function renderUpBtn(container:UIContainerRect, x:number, y:number):UIImage {
 
     return bar
 }
-function renderDownBtn(container:UIContainerRect, x:number, y:number):UIImage {
-    let bar = new UIImage(container, atlas)
+export function renderDownBtn(canvas:UICanvas, x:number, y:number):UIImage {
+    let bar = new UIImage(canvas, atlas)
     bar.vAlign = "top"
     bar.sourceLeft = 0
     bar.sourceTop = 0
