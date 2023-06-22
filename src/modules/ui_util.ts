@@ -43,6 +43,14 @@ export class EntityList {
     this.list.push(e)
   }
 
+  map(fnc:(value:UIText | UIImage) => boolean):Array<boolean> {
+    return this.list.map(fnc)
+  }
+
+  mapHidden() {
+    return this.hidden_list.map
+  }
+
   // these both overwrite! make it so that these gracefully toggle
   hideAll() {
     // this.hidden_list = this.list 

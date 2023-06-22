@@ -68,17 +68,6 @@ export const proposalItem = (proposalData:any) => {
     propScreen.addComponent(new CylinderShape())
     propScreen.getComponent(CylinderShape).visible = false
 
-    const ringTop = new Entity()
-    const ringBot = new Entity()
-
-    ringTop.addComponent(new CylinderShape())
-    ringTop.setParent(propScreen)
-    
-    ringBot.addComponent(new CylinderShape())
-    ringBot.setParent(propScreen)
-
-    ringTop.addComponent(new Transform({scale: new Vector3(3,0.1,3), position: new Vector3(0, 1, 0)}))
-    ringBot.addComponent(new Transform({scale: new Vector3(3,0.1,3), position: new Vector3(0, -3.5, 0)}))
     const textContainer = new Entity()
     textContainer.setParent(propScreen)
 

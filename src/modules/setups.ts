@@ -94,7 +94,7 @@ export function podiumCollider() {
         triggerBox, //shape
         {
           onCameraEnter: () => {
-            movePlayerTo(new Vector3(25.1,36,20.8))
+            movePlayerTo(new Vector3(25.1,36,20.8), new Vector3(26, 35.5, 21))
           }
 
         }

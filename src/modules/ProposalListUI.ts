@@ -96,9 +96,29 @@ export class ProposalListUI {
     exitButton.height = 35
 
     this.ui_elements.add(exitButton)
+    this.deselect()
 
     this.hide()
 
+  }
+
+  deselect() {
+    log("deselecting")
+    this.ui_elements.map((element:UIImage|UIText) => {
+      if (element instanceof UIImage && element.sourceLeft == 530 && element.sourceTop == 670) {
+        element.sourceWidth = 200
+        element.sourceHeight = 5
+        element.sourceLeft = 35
+        element.sourceTop = 398
+        element.width = 540
+        element.height = 16
+        element.positionX = this.x
+      }
+      if (element instanceof UIText && element.name == "proposal-title") {
+          element.color = Color4.Black()
+      }
+      return false
+    })
   }
 
   show() {
@@ -166,6 +186,7 @@ export class ProposalListUI {
           rect.opacity = 1
 
           title.color = Color4.White()
+          title.name = "proposal-title"
 
           this.addButton.sourceLeft = 512
           this.addButton.sourceTop = 662

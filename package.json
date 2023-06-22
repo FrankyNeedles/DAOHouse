@@ -11,7 +11,7 @@
     "ecs:install-next": "npm install --save-dev decentraland-ecs@next"
   },
   "devDependencies": {
-    "decentraland-ecs": "^6.11.14"
+    "decentraland-ecs": "^6.11.15"
   },
   "dependencies": {
     "@dcl/builder-hud": "^1.0.1",
