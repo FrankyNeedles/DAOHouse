@@ -43,6 +43,14 @@ export class EntityList {
     this.list.push(e)
   }
 
+  map(fnc:(value:UIText | UIImage) => boolean):Array<boolean> {
+    return this.list.map(fnc)
+  }
+
+  mapHidden() {
+    return this.hidden_list.map
+  }
+
   // these both overwrite! make it so that these gracefully toggle
   hideAll() {
     // this.hidden_list = this.list 
@@ -67,11 +75,32 @@ export class EntityList {
     }
   }
 
-  deleteByTextTitle(e:api.ProposalItem) {
+  delete() {
+    this.list = this.list.filter((ui_item) => {
+      ui_item.visible = false
+      this.deleted_list.push(ui_item)
+      return false
+    })
+  }
+
+  deleteByEntityName(name:string) {
+    this.list = this.list.filter((ui_item) => {
+      if (ui_item.name == name) {
+        this.deleted_list.push(ui_item)
+        ui_item.visible = false
+        return false
+      } else {
+        return true 
+      }
+    })
+  }
+
+  deleteByTextTitle(val:string) {
     this.list = this.list.filter((ui_item) => {
       if ("value" in ui_item) {
-        if (ui_item.value == e.title) {
-            ui_item.visible = false
+        if (ui_item.value == val) {
+            // ui_item.visible = false
+            this.deleted_list.push(ui_item)
             return false
         } else {
             return true
@@ -81,4 +110,5 @@ export class EntityList {
       }
     })
   }
+
 }

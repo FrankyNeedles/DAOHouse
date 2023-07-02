@@ -7,6 +7,9 @@ import { createScrollBox } from './ui-text-box'
 import { clearUi, toggleUi, indexById, EntityList } from './ui_util'
 import { ProposalQueueUI } from './ProposalQueueUI'
 import { ProposalListUI } from './ProposalListUI'
+import { CurrentProposalUI } from './CurrentProposalUI'
+import { atlas } from './resources'
+import { renderSingleProposalView } from './ProposalItemUI'
 
 const sceneMessageBus = new MessageBus()
 
@@ -17,14 +20,14 @@ export interface PropList<T> {
 const globalX = -80
 const margin = 20
 
-export const lightTheme = new Texture('https://decentraland.org/images/ui/light-atlas-v3.png')
+//TODO: add a user list
 
-// could be a class I guess
-function setUpUI():{canvas:UICanvas, proposal_queue_ui:ProposalQueueUI, proposal_list_ui:ProposalListUI} {
+function setUpUI():{canvas:UICanvas, proposal_queue_ui:ProposalQueueUI, proposal_list_ui:ProposalListUI, current_proposal_ui:CurrentProposalUI} {
     const canvas = new UICanvas()
-    const proposal_queue_ui = new ProposalQueueUI(380, canvas)
+    const proposal_queue_ui = new ProposalQueueUI(380, canvas, sceneMessageBus)
     const proposal_list_ui = new ProposalListUI(canvas, globalX)
-    return { canvas, proposal_queue_ui, proposal_list_ui }
+    const current_proposal_ui = new CurrentProposalUI(canvas, globalX)
+    return { canvas, proposal_queue_ui, proposal_list_ui, current_proposal_ui }
 }
 
 export const gui = setUpUI()
@@ -36,7 +39,11 @@ export const setupProposalList = () => {
     // register add button
     gui.proposal_list_ui.addButton.onClick = new OnPointerDown(() => {
         sceneMessageBus.emit("proposalsAdded", {proposals: gui.proposal_list_ui.selected_proposals})
+        gui.proposal_list_ui.deselect()
     })
+
+    //register remove button
+    
 
     // register exit button
     gui.proposal_list_ui.exitButton.onClick = new OnPointerDown(() => {
@@ -53,11 +60,14 @@ export const setupProposalQueue = () => {
         proposals.map(proposal => {
             gui.proposal_queue_ui.add(proposal)
         })
+        gui.current_proposal_ui.recieve(proposals[0])
     })
 
     // listen for proposals removed from the queue
     sceneMessageBus.on("proposalRemoved", (data) => {
         gui.proposal_queue_ui.remove(data.proposal)
+        gui.proposal_list_ui.removeProposal(data.proposal.title)
+        gui.current_proposal_ui.recieve(gui.proposal_queue_ui.proposals[0])
     })
 
     // send all queued proposals to everyone listening
@@ -66,7 +76,28 @@ export const setupProposalQueue = () => {
         sceneMessageBus.emit("proposalsAdded", {proposals: gui.proposal_queue_ui.proposals})
     })
 
-    // gui.proposal_queue_ui.show()
+    gui.current_proposal_ui.openbtn.onClick = new OnPointerDown(() => {
+        gui.proposal_queue_ui.hide()
+        gui.proposal_list_ui.hide()
+        renderSingleProposalView(0, gui.current_proposal_ui.proposal)
+      })
+    
+    // add a simple hamburger menu to open/close the queue
+    const openbtn = new UIImage(gui.canvas, atlas)
+    openbtn.hAlign = "right"
+    openbtn.sourceLeft = 384
+    openbtn.sourceTop = 0
+    openbtn.sourceWidth = 128
+    openbtn.sourceHeight = 128
+    openbtn.positionX = -12
+    openbtn.positionY = 280
+    openbtn.width = 46
+    openbtn.height = 46
+    openbtn.onClick = new OnPointerDown(() => {
+      sceneMessageBus.emit("requestQueue", {})
+      gui.proposal_queue_ui.show()
+      gui.proposal_list_ui.show()
+    })
 }
 
 export const setupPodiums = (locations:Array<Array<any>>) => {

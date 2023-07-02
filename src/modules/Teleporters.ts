@@ -25,7 +25,8 @@ export const setupTeleporters = (locationArray: Array<Array<Vector3>>): Array<En
         triggerBox, //shape
         {
           onCameraEnter: () => {
-            movePlayerTo(new Vector3(location[1].x, location[1].y + 10, location[1].z))
+            movePlayerTo(new Vector3(location[1].x, location[1].y + 10, location[1].z), new Vector3(22, 38, 25))
+            
           }
         }
       )
@@ -54,18 +55,18 @@ export const setupTeleporters = (locationArray: Array<Array<Vector3>>): Array<En
     const transform5 = new Transform({
       position: location[1],
       rotation: Quaternion.Euler(0, 0, 0),
-      scale: new Vector3(4, 4, 4)
+      scale: new Vector3(4,4,4)
     })
     
     transform5.rotate(new Vector3(0,1,0), location[2].y)
 
     tpPad.addComponentOrReplace(transform5)
 
-    const tpPadShape = new GLTFShape("models/tpPad.gltf")
+    const tpPadShape = new GLTFShape("models/tp_stairs.gltf")
 
     tpPadShape.withCollisions = true
 
-    // tpPadShape.isPointerBlocker = true
+    tpPadShape.isPointerBlocker = true
 
     tpPadShape.visible = true
 

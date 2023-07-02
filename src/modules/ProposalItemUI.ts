@@ -4,7 +4,7 @@ import { EntityList } from "./ui_util"
 import { makeExitButton } from "./buttons"
 import * as api from "./api"
 
-export const renderSingleProposalView = async (globalX:number) => {
+export const renderSingleProposalView = async (globalX:number, proposal?:api.ProposalItem) => {
   // clearUi(ui_elements, ui_texts)
   const canvas = new UICanvas()
 
@@ -44,7 +44,7 @@ export const renderSingleProposalView = async (globalX:number) => {
   ui_elements.add(subtitleText)
 
   // Exit  button
-  const exitButton = makeExitButton(canvas, lightTheme)
+  const exitButton = makeExitButton(canvas, lightTheme, globalX + 260)
 
   ui_elements.add(exitButton)
 
@@ -52,7 +52,7 @@ export const renderSingleProposalView = async (globalX:number) => {
       ui_elements.hideAll()
   })
 
-  let propData = await api.proposalItemData(Math.round(Math.random()*10))
+  let propData = proposal ? proposal : await api.proposalItemData(Math.round(Math.random()*10))
 
   titleText.value = propData.title
 
@@ -61,14 +61,14 @@ export const renderSingleProposalView = async (globalX:number) => {
 
   // render the paragraph
   const paragraph = createScrollBox(
-      0, 120,
+      globalX -220, globalX + 120,
       600,600,
       propData.description,
       canvas)
 
   // render a scroll bar the user can use to move through text
-  const up_btn = renderUpBtn(canvas, 180, -280)
-  const down_btn = renderDownBtn(canvas, 180, -240)
+  const up_btn = renderUpBtn(canvas, globalX + 260, -280)
+  const down_btn = renderDownBtn(canvas, globalX + 260, -240)
   
   up_btn.onClick = new OnPointerDown(() => {
       paragraph.scrollDown()

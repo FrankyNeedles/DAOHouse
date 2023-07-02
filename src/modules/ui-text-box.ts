@@ -1,3 +1,4 @@
+import { ImageData } from "node_modules/@dcl/ui-scene-utils/dist/utils/types"
 import { spawnBoxX } from "./SpawnerFunctions"
 
 let atlas = new Texture('images/arrows.png')
@@ -16,24 +17,10 @@ export function createScrollBox(
         const text_stack = getTextStackFromString(contents)
 
         // render a grouping of these lines inside the bounding container
-        const paragraph = renderParagraph(text_stack, y, height, width, container)
+        const paragraph = renderParagraph(text_stack, x, y, height, width, container)
 
-        // draw a line showing the range of the scroll bar
+        // TODO: draw a line showing the range of the scroll bar
         // const scroll_line = renderScrollLine(container)
-
-        // // render a scroll bar the user can use to move through text
-        // const up_btn = renderUpBtn(container, 180, -20)
-        // const down_btn = renderDownBtn(container, 180, 20)
-        
-        // up_btn.onClick = new OnPointerDown(() => {
-        //     paragraph.scrollDown()
-        //     paragraph.scrollDown()
-        // })
-        
-        // down_btn.onClick = new OnPointerDown(() => {
-        //     paragraph.scrollUp()
-        //     paragraph.scrollUp()
-        // })
 
         return paragraph
 }
@@ -47,7 +34,7 @@ interface Paragraph {
     end: number
 }
 
-function renderParagraph(text_stack:Array<string>, y:number, height:number, width:number, container:UIContainerRect):Paragraph {
+function renderParagraph(text_stack:Array<string>, x:number, y:number, height:number, width:number, container:UIContainerRect):Paragraph {
     const line_count = Math.round(height / (lineHeight() * 2))
     let paragraph:Paragraph = {
         y,
@@ -90,7 +77,7 @@ function renderParagraph(text_stack:Array<string>, y:number, height:number, widt
         let text = new UIText(container)
         text.value = text_stack[i]
         text.color = new Color4(0,0,0,1)
-        text.positionX = -300
+        text.positionX = x
         text.positionY = y - (i * lineHeight())
         if (i > line_count) {
             text.visible = false
@@ -101,6 +88,7 @@ function renderParagraph(text_stack:Array<string>, y:number, height:number, widt
     return paragraph
 }
 
+// TODO: move these to buttons file
 export function renderUpBtn(canvas:UICanvas, x:number, y:number):UIImage {
     let bar = new UIImage(canvas, atlas)
     bar.vAlign = "top"
@@ -128,6 +116,37 @@ export function renderDownBtn(canvas:UICanvas, x:number, y:number):UIImage {
     bar.height = 35
 
     return bar
+}
+
+export function renderXBtn(canvas:UICanvas, x:number, y:number, theme:Texture):UIImage {
+    // Exit button
+    const exitButton = new UIImage(canvas, theme)
+
+    exitButton.sourceLeft = 583
+    exitButton.sourceTop = 381
+    exitButton.sourceWidth = 64
+    exitButton.sourceHeight = 64
+    exitButton.positionX = x
+    exitButton.positionY = y
+    exitButton.width = 35
+    exitButton.height = 35
+
+    return exitButton
+}
+
+export function renderWhiteXBtn(canvas:UICanvas, x:number, y:number):UIImage {
+    const button = new UIImage(canvas, atlas)
+
+    button.sourceLeft = 512
+    button.sourceTop = 0
+    button.sourceWidth = 128
+    button.sourceHeight = 128
+    button.positionX = x
+    button.positionY = y
+    button.width = 35
+    button.height = 35
+
+    return button
 }
 
 function getTextStackFromString(contents:String):Array<string> {

@@ -96,8 +96,47 @@ export class ProposalListUI {
     exitButton.height = 35
 
     this.ui_elements.add(exitButton)
+    this.deselect()
 
     this.hide()
+
+  }
+
+  deselect() {
+    log("deselecting")
+    this.ui_elements.map((element:UIImage|UIText) => {
+      if (element instanceof UIImage && element.sourceLeft == 530 && element.sourceTop == 670) {
+        element.sourceWidth = 200
+        element.sourceHeight = 5
+        element.sourceLeft = 35
+        element.sourceTop = 398
+        element.width = 540
+        element.height = 16
+        element.positionX = this.x
+      }
+      if (element instanceof UIText && element.name == "proposal-title") {
+          element.color = Color4.Black()
+      }
+      return false
+    })
+  }
+
+  deselectOneProposalByName(name:string) {
+    const elements = this.ui_elements.list.filter((e:UIImage | UIText) => {
+      return e.name == name
+    })
+    
+    elements.map((element) => {
+      if (element instanceof UIImage) {
+        element.sourceWidth = 200
+        element.sourceHeight = 5
+        element.sourceLeft = 35
+        element.sourceTop = 398
+      }
+      if (element instanceof UIText) {
+        element.color = Color4.Black()
+      }
+    })
 
   }
 
@@ -112,7 +151,18 @@ export class ProposalListUI {
     if (this.visible) {
       this.ui_elements.hideAll()
       this.visible = false
+      this.deselect()
     }
+  }
+
+  removeProposal(title:string) {
+    this.selected_proposals = this.selected_proposals.filter((proposal:api.ProposalItem) => {
+      if (proposal.title == title) {
+        return false
+      } else {
+        return true
+      }
+    })
   }
 
   async getProposals():Promise<Array<api.ProposalItem>> {
@@ -124,6 +174,7 @@ export class ProposalListUI {
   }
   
   renderProposals() {
+    log(this.proposals)
     let spacer = -125
 
     // render list of all proposals and set up message send
@@ -157,6 +208,10 @@ export class ProposalListUI {
 
       // set up selection UI behavior
       rect.onClick = new OnPointerDown(() => {
+          if (this.selected_proposals.indexOf(proposalItem) != -1) {
+            this.removeProposal(proposalItem.title)
+            // implement click to toggle selection
+          }
           this.selected_proposals.push(proposalItem)
 
           rect.sourceLeft = 530
@@ -166,6 +221,7 @@ export class ProposalListUI {
           rect.opacity = 1
 
           title.color = Color4.White()
+          title.name = "proposal-title"
 
           this.addButton.sourceLeft = 512
           this.addButton.sourceTop = 662
