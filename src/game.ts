@@ -1,5 +1,3 @@
-//  import {spawnGltfX, spawnEntity, spawnBoxX, spawnPlaneX} from './modules/SpawnerFunctions'
-
 import * as teleporters from './modules/Teleporters'
 import { MoveTransformComponent, setTimeout } from '@dcl/ecs-scene-utils'
 import * as setups from './modules/setups'
@@ -31,18 +29,18 @@ let teleporterEntities = teleporters.setupTeleporters(teleporterLocations)
 // get position all the time for dev convenience
 let timer: number = 10
 
-export class LoopSystem {
-  update(dt: number) {
-    if (timer > 0) {
-      timer -= dt
-    } else {
-      timer = 10
-      log(Camera.instance.feetPosition)
-    }
-  }
-}
+// export class LoopSystem {
+//   update(dt: number) {
+//     if (timer > 0) {
+//       timer -= dt
+//     } else {
+//       timer = 10
+//       log(Camera.instance.feetPosition)
+//     }
+//   }
+// }
 
-engine.addSystem(new LoopSystem())
+// engine.addSystem(new LoopSystem())
 
 books.spawnProposals(engine)
 teleporters.setupEffects(engine, teleporterLocations)

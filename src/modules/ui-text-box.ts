@@ -1,5 +1,4 @@
 import { ImageData } from "node_modules/@dcl/ui-scene-utils/dist/utils/types"
-import { spawnBoxX } from "./SpawnerFunctions"
 
 let atlas = new Texture('images/arrows.png')
 

@@ -18,33 +18,16 @@ const setupBandTest = async () => {
 setupPropTest()
 setupBandTest()
 
-// test for swapping screen proposal to random proposal
-const ball = new Entity()
-ball.addComponent(new SphereShape())
-ball.getComponent(SphereShape).withCollisions = false
-ball.addComponent(new Transform({position: new Vector3(27,36,20), scale: new Vector3(.5,.5,.5)}))
-engine.addEntity(ball)
-hud.attachToEntity(ball)
+export function setCurrentBandProposal(proposal:api.ProposalItem) {
+  let nextScreenEntity = api.proposalItem(proposal)
 
-//message test
-const sceneMessageBus = new MessageBus()
-
-ball.addComponent(
-  new OnPointerDown(async (e) => {
-    const propTestData = await api.proposalItemData(Math.round(Math.random()*10))
-    sceneMessageBus.emit("ballClicked", { proposal: propTestData})
-  })
-)
-
-sceneMessageBus.on("ballClicked", (data) => {
-  log(data)
-  let nextScreenEntity = api.proposalItem(data.proposal)
-  let nextPresentationBandEntity = api.presentationBand(data.proposal)
+  let nextPresentationBandEntity = api.presentationBand(proposal)
   api.swapEntity(screenEntity, nextScreenEntity)
   screenEntity = nextScreenEntity
+
   api.swapEntity(presentationBandEntity, nextPresentationBandEntity)
   presentationBandEntity = nextPresentationBandEntity
-})
+}
 
 export async function setUpPresentationBand() {
     const propTestData = await api.proposalItemData(Math.round(Math.random()*10))

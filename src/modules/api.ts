@@ -1,10 +1,12 @@
 import * as utils from '@dcl/ecs-scene-utils'
 
 export const getData = async () => {
+    //TODO: add prod/dev mgmt
     let json = await utils.sendRequest(
-        'https://purple-fog-56ac.twaldorf.workers.dev/proxy/?route=proposals?limit=14'
+        'https://dcl-dao-api-1.twaldorf.workers.dev/proxy/?route=proposals?limit=14 '
       )
     const { data } = json
+    log(data)
     return data
 }
 
