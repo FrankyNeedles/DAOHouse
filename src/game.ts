@@ -48,7 +48,7 @@ books.spawnProposals(engine)
 teleporters.setupEffects(engine, teleporterLocations)
 
 // teleport for debug reasons
-setTimeout(2000, () => {
-  movePlayerTo(new Vector3(30,32,32))
-})
+// setTimeout(2000, () => {
+//   movePlayerTo(new Vector3(30,32,32))
+// })
 

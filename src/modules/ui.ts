@@ -18,11 +18,13 @@ export interface PropList<T> {
 const globalX = -80
 const margin = 20
 
+//TODO: add a user list
+
 export const lightTheme = new Texture('https://decentraland.org/images/ui/light-atlas-v3.png')
 
 function setUpUI():{canvas:UICanvas, proposal_queue_ui:ProposalQueueUI, proposal_list_ui:ProposalListUI, current_proposal_ui:CurrentProposalUI} {
     const canvas = new UICanvas()
-    const proposal_queue_ui = new ProposalQueueUI(380, canvas)
+    const proposal_queue_ui = new ProposalQueueUI(380, canvas, sceneMessageBus)
     const proposal_list_ui = new ProposalListUI(canvas, globalX)
     const current_proposal_ui = new CurrentProposalUI(canvas, globalX)
     return { canvas, proposal_queue_ui, proposal_list_ui, current_proposal_ui }
@@ -39,6 +41,9 @@ export const setupProposalList = () => {
         sceneMessageBus.emit("proposalsAdded", {proposals: gui.proposal_list_ui.selected_proposals})
         gui.proposal_list_ui.deselect()
     })
+
+    //register remove button
+    
 
     // register exit button
     gui.proposal_list_ui.exitButton.onClick = new OnPointerDown(() => {
@@ -61,6 +66,7 @@ export const setupProposalQueue = () => {
     // listen for proposals removed from the queue
     sceneMessageBus.on("proposalRemoved", (data) => {
         gui.proposal_queue_ui.remove(data.proposal)
+        gui.proposal_list_ui.removeProposal(data.proposal.title)
     })
 
     // send all queued proposals to everyone listening

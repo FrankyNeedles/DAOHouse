@@ -1,3 +1,4 @@
+import { ImageData } from "node_modules/@dcl/ui-scene-utils/dist/utils/types"
 import { spawnBoxX } from "./SpawnerFunctions"
 
 let atlas = new Texture('images/arrows.png')
@@ -128,6 +129,37 @@ export function renderDownBtn(canvas:UICanvas, x:number, y:number):UIImage {
     bar.height = 35
 
     return bar
+}
+
+export function renderXBtn(canvas:UICanvas, x:number, y:number, theme:Texture):UIImage {
+    // Exit button
+    const exitButton = new UIImage(canvas, theme)
+
+    exitButton.sourceLeft = 583
+    exitButton.sourceTop = 381
+    exitButton.sourceWidth = 64
+    exitButton.sourceHeight = 64
+    exitButton.positionX = x
+    exitButton.positionY = y
+    exitButton.width = 35
+    exitButton.height = 35
+
+    return exitButton
+}
+
+export function renderWhiteXBtn(canvas:UICanvas, x:number, y:number):UIImage {
+    const button = new UIImage(canvas, atlas)
+    button.vAlign = "top"
+    button.sourceLeft = 256
+    button.sourceTop = 0
+    button.sourceWidth = 128
+    button.sourceHeight = 128
+    button.positionX = x
+    button.positionY = y
+    button.width = 35
+    button.height = 35
+
+    return button
 }
 
 function getTextStackFromString(contents:String):Array<string> {

@@ -1,3 +1,5 @@
+let atlas = new Texture('images/arrows.png')
+
 export const makeAddButton = (canvas:UICanvas, lightTheme:Texture, globalX: number) => {
   const addButton = new UIImage(canvas, lightTheme)
   addButton.sourceLeft = 512
