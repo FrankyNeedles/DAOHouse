@@ -1,10 +1,10 @@
 {
   "display": {
-    "title": "interactive-text",
+    "title": "DAO House Research",
     "favicon": "favicon_asset"
   },
   "contact": {
-    "name": "trevor",
+    "name": "trev",
     "email": "trevor#5528"
   },
   "owner": "",
@@ -32,6 +32,9 @@
   ],
   "main": "bin/game.js",
   "tags": [],
+  "worldConfiguration" : {
+    "name": "trev.dcl.eth"
+  },
   "spawnPoints": [
     {
       "name": "spawn1",

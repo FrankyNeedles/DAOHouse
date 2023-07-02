@@ -1,6 +1,7 @@
 import { renderSingleProposalView } from "./ProposalItemUI"
 import { ProposalListUI } from "./ProposalListUI"
 import { ProposalItem } from "./api"
+import { setCurrentBandProposal } from "./controls"
 import { atlas } from "./resources"
 import { EntityList } from "./ui_util"
 import { lightTheme } from "@dcl/ui-scene-utils"
@@ -45,7 +46,6 @@ export class CurrentProposalUI {
     this.container.positionX = 20
     this.container.vAlign = "bottom"
     
-    // ?? why doesn't this render
     this.openbtn = new UIImage(this.container, atlas)
     this.openbtn.vAlign = "top"
     this.openbtn.hAlign = "right"
@@ -75,9 +75,11 @@ export class CurrentProposalUI {
     if (this.proposal == null) {
       this.proposal = proposal
       this.setProposal(proposal)
+      setCurrentBandProposal(proposal)
     } else {
       this.ui_elements.delete()
       this.setProposal(proposal)
+      setCurrentBandProposal(proposal)
     }
   }
 
