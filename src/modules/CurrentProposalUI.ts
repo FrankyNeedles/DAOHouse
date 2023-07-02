@@ -1,4 +1,7 @@
+import { renderSingleProposalView } from "./ProposalItemUI"
+import { ProposalListUI } from "./ProposalListUI"
 import { ProposalItem } from "./api"
+import { atlas } from "./resources"
 import { EntityList } from "./ui_util"
 import { lightTheme } from "@dcl/ui-scene-utils"
 
@@ -15,35 +18,51 @@ export class CurrentProposalUI {
   canvas: UICanvas
   proposal: any
   globalX: number
+  openbtn: UIImage
   container: UIContainerRect
+  background_top: UIImage
 
   constructor(canvas:UICanvas, globalX: number) {
     this.canvas = canvas
     this.globalX = globalX
     this.proposal = null
 
-    const background_top = new UIImage(canvas, lightTheme)
-    background_top.hAlign = "center"
-    background_top.sourceWidth = 780
-    background_top.sourceHeight = 95
-    background_top.sourceLeft = 11
-    background_top.sourceTop = 750
-    background_top.width = 600
-    background_top.height = 80
-    background_top.positionY = -50
-    background_top.vAlign = "bottom"
-    this.ui_elements.add(background_top)
+    this.background_top = new UIImage(canvas, lightTheme)
+    this.background_top.hAlign = "center"
+    this.background_top.sourceWidth = 780
+    this.background_top.sourceHeight = 95
+    this.background_top.sourceLeft = 11
+    this.background_top.sourceTop = 750
+    this.background_top.width = 600
+    this.background_top.height = 80
+    this.background_top.positionY = -50
+    this.background_top.vAlign = "bottom"
+    
+    this.container = new UIContainerRect(canvas)
+    this.container.hAlign = "center"
+    this.container.width = 580
+    this.container.height = 50
+    this.container.positionX = 20
+    this.container.vAlign = "bottom"
+    
+    // ?? why doesn't this render
+    this.openbtn = new UIImage(this.container, atlas)
+    this.openbtn.vAlign = "top"
+    this.openbtn.hAlign = "right"
+    this.openbtn.sourceLeft = 0
+    this.openbtn.sourceTop = 0
+    this.openbtn.sourceWidth = 128
+    this.openbtn.sourceHeight = 128
+    this.openbtn.positionX = -28
+    this.openbtn.positionY = -36
+    this.openbtn.width = 35
+    this.openbtn.height = 35
 
-    const container = new UIContainerRect(canvas)
-    container.hAlign = "center"
-    container.width = 580
-    container.height = 50
-    container.positionX = 20
-    container.vAlign = "bottom"
+    this.render(canvas, globalX)
+  }
 
-    this.container = container
-
-    const labelText = new UIText(container)
+  render(canvas:UICanvas, globalX: number) {
+    const labelText = new UIText(this.container)
     labelText.color = Color4.Black()
     labelText.value = 'CURRENT PROPOSAL'
     labelText.fontSize = 10
@@ -56,12 +75,16 @@ export class CurrentProposalUI {
     if (this.proposal == null) {
       this.proposal = proposal
       this.setProposal(proposal)
+    } else {
+      this.ui_elements.delete()
+      this.setProposal(proposal)
     }
   }
 
   setProposal(proposal:ProposalItem) {
-    const canvas = this.canvas
-    const globalX = this.globalX
+    this.ui_elements.delete()
+
+    this.proposal = proposal
 
     const titleText = new UIText(this.container)
     titleText.color = Color4.Black()
@@ -73,9 +96,4 @@ export class CurrentProposalUI {
     titleText.width = "80%"
     this.ui_elements.add(titleText)
   }
-  // expand()
-  // minimize()
-  // next()
-  // prev()
-
 }

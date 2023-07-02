@@ -8,6 +8,8 @@ import { clearUi, toggleUi, indexById, EntityList } from './ui_util'
 import { ProposalQueueUI } from './ProposalQueueUI'
 import { ProposalListUI } from './ProposalListUI'
 import { CurrentProposalUI } from './CurrentProposalUI'
+import { atlas } from './resources'
+import { renderSingleProposalView } from './ProposalItemUI'
 
 const sceneMessageBus = new MessageBus()
 
@@ -19,8 +21,6 @@ const globalX = -80
 const margin = 20
 
 //TODO: add a user list
-
-export const lightTheme = new Texture('https://decentraland.org/images/ui/light-atlas-v3.png')
 
 function setUpUI():{canvas:UICanvas, proposal_queue_ui:ProposalQueueUI, proposal_list_ui:ProposalListUI, current_proposal_ui:CurrentProposalUI} {
     const canvas = new UICanvas()
@@ -59,14 +59,15 @@ export const setupProposalQueue = () => {
         const proposals:Array<api.ProposalItem> = data.proposals
         proposals.map(proposal => {
             gui.proposal_queue_ui.add(proposal)
-            gui.current_proposal_ui.recieve(proposal)
         })
+        gui.current_proposal_ui.recieve(proposals[0])
     })
 
     // listen for proposals removed from the queue
     sceneMessageBus.on("proposalRemoved", (data) => {
         gui.proposal_queue_ui.remove(data.proposal)
         gui.proposal_list_ui.removeProposal(data.proposal.title)
+        gui.current_proposal_ui.recieve(gui.proposal_queue_ui.proposals[0])
     })
 
     // send all queued proposals to everyone listening
@@ -75,7 +76,28 @@ export const setupProposalQueue = () => {
         sceneMessageBus.emit("proposalsAdded", {proposals: gui.proposal_queue_ui.proposals})
     })
 
-    // gui.proposal_queue_ui.show()
+    gui.current_proposal_ui.openbtn.onClick = new OnPointerDown(() => {
+        gui.proposal_queue_ui.hide()
+        gui.proposal_list_ui.hide()
+        renderSingleProposalView(0, gui.current_proposal_ui.proposal)
+      })
+    
+    // add a simple hamburger menu to open/close the queue
+    const openbtn = new UIImage(gui.canvas, atlas)
+    openbtn.hAlign = "right"
+    openbtn.sourceLeft = 384
+    openbtn.sourceTop = 0
+    openbtn.sourceWidth = 128
+    openbtn.sourceHeight = 128
+    openbtn.positionX = -12
+    openbtn.positionY = 280
+    openbtn.width = 46
+    openbtn.height = 46
+    openbtn.onClick = new OnPointerDown(() => {
+      sceneMessageBus.emit("requestQueue", {})
+      gui.proposal_queue_ui.show()
+      gui.proposal_list_ui.show()
+    })
 }
 
 export const setupPodiums = (locations:Array<Array<any>>) => {

@@ -1,7 +1,7 @@
 import { EntityList } from "./ui_util"
 import { ProposalItem } from "./api"
 import { lightTheme } from "@dcl/ui-scene-utils"
-import { renderWhiteXBtn } from "./ui-text-box"
+import { renderWhiteXBtn, renderXBtn } from "./ui-text-box"
 import { requestQueue } from "./messaging"
 
 export class ProposalQueueUI {
@@ -13,7 +13,7 @@ export class ProposalQueueUI {
   bus:MessageBus
 
   constructor(
-      xPos:number, 
+      xPos:number,
       canvas:UICanvas,
       bus:MessageBus
   ){

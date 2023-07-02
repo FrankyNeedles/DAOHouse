@@ -13,13 +13,13 @@ export const makeAddButton = (canvas:UICanvas, lightTheme:Texture, globalX: numb
   return addButton
 }
 
-export const makeExitButton = (canvas:UICanvas, lightTheme:Texture, globalX?: number) => {
+export const makeExitButton = (canvas:UICanvas, lightTheme:Texture, x: number) => {
   const exitButton = new UIImage(canvas, lightTheme)
   exitButton.sourceLeft = 583
   exitButton.sourceTop = 381
   exitButton.sourceWidth = 64
   exitButton.sourceHeight = 64
-  exitButton.positionX = 180
+  exitButton.positionX = x
   exitButton.positionY = 210
   exitButton.width = 35
   exitButton.height = 35
